@@ -1,0 +1,236 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "ZONE_A_YAMUNA",
+                "name": "Yamuna Floodplains",
+                "law": "Environment Protection Act, 1986",
+                "article": "Article 21 (Right to Clean Environment)",
+                "section": "Section 3(2)(v) - Restriction of Industries & Construction",
+                "severity": "CRITICAL"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            77.24,
+                            28.58
+                        ],
+                        [
+                            77.35,
+                            28.58
+                        ],
+                        [
+                            77.35,
+                            28.68
+                        ],
+                        [
+                            77.24,
+                            28.68
+                        ],
+                        [
+                            77.24,
+                            28.58
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "ZONE_B_ARAVALLI",
+                "name": "Aravalli Ridge",
+                "law": "Forest (Conservation) Act, 1980",
+                "article": "SC Ruling on Aravalli Mining (2002)",
+                "section": "Section 2 - Restriction on the dereservation of forests",
+                "severity": "CRITICAL"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            77.12,
+                            28.53
+                        ],
+                        [
+                            77.16,
+                            28.53
+                        ],
+                        [
+                            77.16,
+                            28.57
+                        ],
+                        [
+                            77.12,
+                            28.57
+                        ],
+                        [
+                            77.12,
+                            28.53
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "ZONE_C_UP_GREENBELT",
+                "name": "Industrial Green Belt (UP)",
+                "law": "UP Urban Planning & Development Act, 1973",
+                "article": "Section 13",
+                "section": "Section 13 - Restriction on land use",
+                "severity": "HIGH"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            77.38,
+                            28.45
+                        ],
+                        [
+                            77.50,
+                            28.45
+                        ],
+                        [
+                            77.50,
+                            28.55
+                        ],
+                        [
+                            77.38,
+                            28.55
+                        ],
+                        [
+                            77.38,
+                            28.45
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "ZONE-BIHAR-01",
+                "name": "Kosi Flood Protection Zone",
+                "law": "Bihar Flood Management Act, 2024",
+                "article": "Article 48A (Protection of Environment)",
+                "section": "Section 9 - Prohibition of construction in floodplains",
+                "severity": "CRITICAL",
+                "jurisdiction": "Patna High Court"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            86.9,
+                            25.8
+                        ],
+                        [
+                            87.1,
+                            25.8
+                        ],
+                        [
+                            87.1,
+                            26.0
+                        ],
+                        [
+                            86.9,
+                            26.0
+                        ],
+                        [
+                            86.9,
+                            25.8
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "ZONE-RAJ-01",
+                "name": "Sariska Tiger Reserve Buffer",
+                "law": "Wildlife Protection Act, 1972",
+                "article": "Article 51A(g) (Compassion for living creatures)",
+                "section": "Section 35(6) - Restriction on destruction of habitat",
+                "severity": "CRITICAL",
+                "jurisdiction": "NGT Principal Bench"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            76.3,
+                            27.2
+                        ],
+                        [
+                            76.5,
+                            27.2
+                        ],
+                        [
+                            76.5,
+                            27.4
+                        ],
+                        [
+                            76.3,
+                            27.4
+                        ],
+                        [
+                            76.3,
+                            27.2
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "ZONE-GUJ-01",
+                "name": "Gulf of Kutch CRZ-1",
+                "law": "Coastal Regulation Zone Notification, 2011",
+                "article": "Article 21 (Protection of Life and Liberty)",
+                "section": "CRZ-I - Ecologically Sensitive Area",
+                "severity": "HIGH",
+                "jurisdiction": "Gujarat High Court"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            69.5,
+                            22.5
+                        ],
+                        [
+                            69.7,
+                            22.5
+                        ],
+                        [
+                            69.7,
+                            22.7
+                        ],
+                        [
+                            69.5,
+                            22.7
+                        ],
+                        [
+                            69.5,
+                            22.5
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}

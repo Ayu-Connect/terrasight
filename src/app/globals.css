@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --color-deep-space: #050505;
+  --color-electric-cyan: #00F2FF;
+  --color-warning-amber: #FFAB00;
+  --color-matrix-green: #00FF41;
+  
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+:root {
+  --background: #050505;
+  --foreground: #ededed;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-jetbrains-mono), monospace;
+  overflow: hidden; /* Mission Control fixed layout */
+}
+
+/* Custom Utilities */
+.glass-panel {
+  background: rgba(5, 5, 5, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 242, 255, 0.1);
+}
+
+.neon-grid {
+  background-image: linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+}
+
+/* Scrollbar Hide */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
