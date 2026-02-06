@@ -6,18 +6,17 @@ export const generateFIR = async (detectionId: string | number) => {
     // 1. Fetch Data from Supabase
     let query = supabase.from('detections').select('*');
 
-    // Check if detectionId is likely a number (Supabase ID) or Hash
-    const isNum = !isNaN(Number(detectionId));
+    // Check for UUID format (Supabase IDs are UUIDs)
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(detectionId.toString());
+    const isHash = detectionId.toString().startsWith('0x');
 
-    if (isNum) {
+    if (isUUID) {
         query = query.eq('id', detectionId);
+    } else if (isHash) {
+        query = query.eq('blockchain_hash', detectionId);
     } else {
-        // Assume it's a Transaction Hash or Evidence Hash part or string ID
-        query = query.eq('id', detectionId);
-        // Note: If ID is UUID string, isNum is false, equality works.
-        // If detectionId is txHash, this check fails if DB id is UUID/Int. 
-        // But orchestrator uses int8 or uuid? Supabase default is usually int8.
-        // 'activeTarget.id' comes from 'detection.id.toString()' in useRealtimeAlerts. So it is the ID.
+        console.warn("Invalid Detection ID format:", detectionId);
+        throw new Error("Invalid Detection ID: Must be UUID or Blockchain Hash");
     }
 
     const { data: detection, error } = await query.single();
@@ -33,7 +32,7 @@ export const generateFIR = async (detectionId: string | number) => {
     const pdfDoc = await PDFDocument.create();
     const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
     const page = pdfDoc.addPage();
-    const { width, height } = page.getSize();
+    const { height } = page.getSize();
 
     // 3. Add Content
     const fontSize = 12;
@@ -74,7 +73,7 @@ export const generateFIR = async (detectionId: string | number) => {
     drawText('FORENSIC EVIDENCE (FUSION ENGINE):', 14, rgb(0, 0, 1));
     drawText(`Source: Multi-Spectral Fusion (ISRO Cartosat + Sentinel-1/2)`);
     drawText(`AI Confidence: ${(detection.confidence * 100).toFixed(2)}% (DRDO-Logic Verified)`);
-    drawText(`Blockchain Tx Hash: ${detection.transaction_hash || 'PENDING'}`);
+    drawText(`Blockchain Tx Hash: ${detection.blockchain_hash || 'PENDING'}`);
     drawText(`Media Evidence Hash: ${detection.evidence_hash || 'N/A'}`);
     yPosition -= 20;
 

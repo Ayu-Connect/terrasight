@@ -15,6 +15,7 @@ export default function ComplianceDossier() {
         setIsGenerating(true);
         try {
             const pdfBytes = await generateFIR(activeTarget.id);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
             window.open(url, "_blank");
@@ -70,9 +71,9 @@ export default function ComplianceDossier() {
                             <Gavel className="w-3 h-3" /> LEGAL VIOLATION DETECTED
                         </div>
                         <div className="p-3 bg-red-500/10 border border-red-500/20 rounded text-xs text-white/80 leading-relaxed font-mono">
-                            <span className="text-red-400 font-bold">ACT:</span> {activeTarget.legal.act}<br />
-                            <span className="text-red-400 font-bold">SECTION:</span> {activeTarget.legal.section}<br />
-                            <span className="text-red-400 font-bold">SEVERITY:</span> {activeTarget.legal.severity}
+                            <span className="text-red-400 font-bold">ACT:</span> {activeTarget.legal?.act as string}<br />
+                            <span className="text-red-400 font-bold">SECTION:</span> {activeTarget.legal?.section as string}<br />
+                            <span className="text-red-400 font-bold">SEVERITY:</span> {activeTarget.legal?.severity as string}
                         </div>
                     </div>
 

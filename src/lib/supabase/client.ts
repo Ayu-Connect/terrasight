@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -31,5 +32,8 @@ const createMockClient = () => {
 };
 
 export const supabase = (supabaseUrl && supabaseKey)
-    ? createClient(supabaseUrl, supabaseKey)
+    ? (() => {
+        console.log("[Supabase] Initializing with URL:", supabaseUrl?.slice(0, 20) + "...");
+        return createClient(supabaseUrl, supabaseKey);
+    })()
     : createMockClient();

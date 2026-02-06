@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useMission, AVAILABLE_STATES, StateConfig } from "@/context/MissionContext";
-import { Globe, Shield, Activity, ChevronRight, Terminal } from "lucide-react";
+import { Globe, Activity, ChevronRight, Terminal } from "lucide-react";
 
 export default function CommandInit() {
     const { activeState, setActiveState } = useMission();
-    const [isBooted, setIsBooted] = useState(false);
+
 
     // If state is already selected, don't show this screen
     if (activeState) return null;

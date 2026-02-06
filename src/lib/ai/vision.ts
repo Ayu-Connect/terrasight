@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/client";
+
 import cadastralData from "@/data/mock_cadastral_data.json";
 import bbox from "@turf/bbox";
 import { point } from "@turf/helpers";
@@ -7,7 +7,7 @@ import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 // Helper to get random number in range
 const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-export const detectChange = async (t0_image_id: string, t1_image_id: string) => {
+export const detectChange = async (_t0_image_id: string, _t1_image_id: string) => {
     // Simulate GPU inference time
     await new Promise((resolve) => setTimeout(resolve, 1200));
 

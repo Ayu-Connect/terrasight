@@ -4,7 +4,7 @@ import SystemPulse from "@/components/dashboard/SystemPulse";
 import SurveillanceFeed from "@/components/dashboard/SurveillanceFeed";
 import ComplianceDossier from "@/components/dashboard/ComplianceDossier";
 import TemporalSlider from "@/components/dashboard/TemporalSlider";
-import { MissionProvider, useMission } from "@/context/MissionContext";
+import { MissionProvider } from "@/context/MissionContext";
 import useRealtimeAlerts from "@/hooks/useRealtimeAlerts";
 
 function InternalLayout({ children }: { children: React.ReactNode }) {

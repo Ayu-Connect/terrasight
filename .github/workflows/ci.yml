@@ -1,0 +1,35 @@
+
+name: CodeGenesis CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-systems:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Install Dependencies
+      run: npm ci
+      
+    - name: Lint
+      run: npm run lint
+      
+    - name: Verify Sentinel Hub API
+      run: npx tsx scripts/verify_sentinel.ts
+      env:
+        SENTINEL_CLIENT_ID: ${{ secrets.SENTINEL_CLIENT_ID }}
+        SENTINEL_CLIENT_SECRET: ${{ secrets.SENTINEL_CLIENT_SECRET }}
+        
+    - name: Verify Bhuvan Proxy
+      run: npx tsx scripts/verify_bhuvan.ts

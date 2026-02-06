@@ -1,8 +1,8 @@
 import intersect from '@turf/intersect';
 import area from '@turf/area';
-import { checkGeoCompliance } from '../governance/moat'; // Or moat_db if migrating
+
 import cadastralData from '../../data/mock_cadastral_data.json';
-import { polygon } from '@turf/helpers';
+import { featureCollection } from '@turf/helpers';
 
 interface AuditResult {
     isEncroachment: boolean;
@@ -43,7 +43,7 @@ export const performSpatialAudit = async (detectedPolyGeoJSON: any): Promise<Aud
 
         // Calculate Intersection
         // turf.intersect takes two Feature<Polygon> or Geometry objects
-        const intersection = intersect(detectedPolyGeoJSON, feature as any);
+        const intersection = intersect(featureCollection([detectedPolyGeoJSON, feature as any]));
 
         if (intersection) {
             // Overlap detected!
