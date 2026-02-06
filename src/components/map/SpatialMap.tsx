@@ -9,9 +9,9 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useMission, Alert } from "@/context/MissionContext";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function DeckGLOverlay(props: any) {
-    const overlay = useControl<MapboxOverlayType>(() => new MapboxOverlay(props));
-    overlay.setProps(props);
+function DeckGLOverlay(props: { layers: any[]; interleaved?: boolean }) {
+    const overlay = useControl<MapboxOverlayType>(() => new MapboxOverlay(props as any));
+    overlay.setProps(props as any);
     return null;
 }
 
@@ -38,42 +38,51 @@ export default function SpatialMap() {
 
     useEffect(() => {
         if (activeTarget) {
-            setViewState(prev => ({
-                ...prev,
-                longitude: activeTarget.coordinates[0],
-                latitude: activeTarget.coordinates[1],
-                zoom: 16,
-                pitch: 60,
-                transitionDuration: 2000,
-            }));
-        } else if (activeState) {
-            if (activeState.bbox) {
-                // Use fitBounds for state
-                // We need access to the map instance. `useControl` isn't quite right for just accessing the map instance in this library usually.
-                // React Map GL exposes `current` on a ref passed to <Map>, or we can just set ViewState closely.
-                // For simplicity in this controlled component, let's just calculate center/zoom or use the predefined ones.
-                // But fitBounds is better. 
-                // Since this is a "Controlled" map (viewState prop), we can't easily use map.fitBounds() without updating viewState manually.
-                // We will rely on the `coordinates` and `zoom` from constants which are now well-defined.
+            // Only update if significantly different to avoid loops
+            if (Math.abs(viewState.longitude - activeTarget.coordinates[0]) > 0.0001 ||
+                Math.abs(viewState.latitude - activeTarget.coordinates[1]) > 0.0001) {
                 setViewState(prev => ({
                     ...prev,
-                    longitude: activeState.coordinates[0], // Note: Fixed to [lng, lat] in constants
-                    latitude: activeState.coordinates[1],
-                    zoom: activeState.zoom,
+                    longitude: activeTarget.coordinates[0],
+                    latitude: activeTarget.coordinates[1],
+                    zoom: 16,
                     pitch: 60,
                     transitionDuration: 2000,
                 }));
+            }
+        } else if (activeState) {
+            const targetLng = activeState.coordinates[0];
+            const targetLat = activeState.coordinates[1];
+
+            if (activeState.bbox) {
+                // Check if we are already close enough
+                if (Math.abs(viewState.longitude - targetLng) > 0.0001 ||
+                    Math.abs(viewState.latitude - targetLat) > 0.0001) {
+                    setViewState(prev => ({
+                        ...prev,
+                        longitude: targetLng,
+                        latitude: targetLat,
+                        zoom: activeState.zoom,
+                        pitch: 60,
+                        transitionDuration: 2000,
+                    }));
+                }
             } else {
-                setViewState(prev => ({
-                    ...prev,
-                    longitude: activeState.coordinates[0],
-                    latitude: activeState.coordinates[1],
-                    zoom: activeState.zoom,
-                    pitch: 60,
-                    transitionDuration: 3000,
-                }));
+                if (Math.abs(viewState.longitude - targetLng) > 0.0001 ||
+                    Math.abs(viewState.latitude - targetLat) > 0.0001) {
+                    setViewState(prev => ({
+                        ...prev,
+                        longitude: targetLng,
+                        latitude: targetLat,
+                        zoom: activeState.zoom,
+                        pitch: 60,
+                        transitionDuration: 3000,
+                    }));
+                }
             }
         }
+        // Exclude viewState from deps to prevent loop, we only react to activeTarget/activeState changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTarget, activeState]);
 
     const layers = [

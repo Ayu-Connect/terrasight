@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+
 import { motion } from "framer-motion";
 import { useMission, AVAILABLE_STATES, StateConfig } from "@/context/MissionContext";
 import { Globe, Activity, ChevronRight, Terminal } from "lucide-react";

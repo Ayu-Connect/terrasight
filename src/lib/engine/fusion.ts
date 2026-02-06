@@ -1,6 +1,17 @@
 
 import { fetchSentinelData } from '../ai/sentinelHub';
 
+export interface SatelliteMetadata {
+    polarization?: string;
+    orbit?: string;
+    backscatter_db?: number;
+    source_type?: string;
+    cloud_cover?: number;
+    ndvi?: number;
+    look_angle?: number;
+    mode?: string;
+}
+
 export interface SatelliteSource {
     id: string;
     provider: 'ESA_SENTINEL' | 'ISRO_BHUVAN' | 'DRDO_INTERNAL';
@@ -8,7 +19,7 @@ export interface SatelliteSource {
     resolution_m: number;
     timestamp: string;
     url: string;
-    metadata: any;
+    metadata: SatelliteMetadata;
 }
 
 export interface FusedScene {
@@ -28,7 +39,7 @@ export interface FusedScene {
  * MOCK: Simulates the "Geometric Co-registration" process.
  * In a real engine, this uses Ground Control Points (GCPs) to align pixels.
  */
-const alignGeometries = (_layers: any[]): number => {
+const alignGeometries = (_layers: SatelliteSource[]): number => {
     // Simulating sub-pixel alignment calculation
     // Return a high quality score for the demo
     return 0.98 + (Math.random() * 0.02); // 98% - 100% precision
@@ -122,7 +133,7 @@ export const analyzeTerrainVulnerability = (scene: FusedScene) => {
     let materialType = 'UNKNOWN';
     let confidence = 0.0;
 
-    const backscatter = sarMeta.backscatter_db;
+    const backscatter = sarMeta.backscatter_db ?? -20; // Default to low backscatter if missing
 
     if (backscatter > -6) {
         materialType = 'METAL_CONCRETE_COMPOSITE'; // Man-made

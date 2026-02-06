@@ -6,7 +6,7 @@
  * Tests if the upstream WMS server accepts our headers and returns a valid image.
  */
 
-import crypto from 'crypto';
+
 
 const BHUVAN_WMS = "https://bhuvan-vec1.nrsc.gov.in/bhuvan/wms";
 

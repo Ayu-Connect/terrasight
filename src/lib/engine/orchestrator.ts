@@ -1,6 +1,5 @@
-
 import { supabase } from '../supabase/client';
-import { checkGeoCompliance, generateLegalNotice, checkStateCompliance } from '../governance/moat';
+import { checkGeoCompliance, generateLegalNotice, checkStateCompliance, LegalVerdict } from '../governance/moat';
 import { anchorEvidence } from '../blockchain/anchor';
 import { detectChange } from '../ai/sentinelHub'; // The new Real Sentinel Engine
 import { FusedScene } from './fusion';
@@ -8,7 +7,7 @@ import { FusedScene } from './fusion';
 interface OrchestrationResult {
     id?: string; // Added DB ID
     status: 'VERIFIED' | 'IGNORED' | 'PENDING';
-    verdict?: any;
+    verdict?: LegalVerdict;
     confidence: number;
     message: string;
     txHash?: string;

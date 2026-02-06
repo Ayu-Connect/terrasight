@@ -34,6 +34,22 @@ export interface LegalVerdict {
     jurisdiction: string;
 }
 
+interface CadastralProperties {
+    zone_type?: string;
+    name?: string;
+    severity?: string;
+    [key: string]: unknown;
+}
+
+interface CadastralFeature {
+    type: "Feature";
+    geometry: {
+        type: "Polygon" | "Point" | "MultiPolygon"; // Added broader support
+        coordinates: any[];
+    };
+    properties: CadastralProperties;
+}
+
 /**
  * State-Specific Law Mapping (Neuro-Symbolic Logic)
  * Maps a verified Sentinel detection in a specific state to the relevant Act.
@@ -93,13 +109,16 @@ export const checkGeoCompliance = (lat: number, lng: number): LegalVerdict => {
     for (const feature of cadastralData.features) {
         if (!feature.geometry || feature.geometry.type !== 'Polygon') continue;
 
-        // Cast feature to any to bypass strict GeoJSON type mismatches
-        const poly = feature as any;
+        // Cast feature to unknown first if needed, but here we can assert type
+        const poly = feature as unknown as CadastralFeature;
 
         // 1. Direct Intersection Check
-        if (booleanPointInPolygon(pt, poly)) {
-            const props = feature.properties as any;
-            const zoneType = props.zone_type || "FOREST"; // Fallback to Forest
+        if (booleanPointInPolygon(pt, poly as any)) { // Turf types are loose, but we keep 'any' for Turf compatibility or cast to Feature<Polygon> if strict
+            // For linting fix, we want to type `feature`. 
+            // booleanPointInPolygon expects Feature<Polygon, Properties>. 
+            // Our internal type is for property access.
+            const props = poly.properties;
+            const zoneType = (props.zone_type || "FOREST") as string; // Fallback to Forest
             const lawDetails = LAW_MAP[zoneType] || LAW_MAP["FOREST"];
 
             return {
@@ -108,7 +127,7 @@ export const checkGeoCompliance = (lat: number, lng: number): LegalVerdict => {
                 article: lawDetails.desc,
                 section: lawDetails.section,
                 severity: props.severity as 'CRITICAL' | 'HIGH',
-                zone: props.name,
+                zone: props.name || "Unknown Zone",
                 penalty_type: "Immediate Sealing & Prosecution",
                 jurisdiction: "Supreme Court of India"
             };
@@ -116,11 +135,11 @@ export const checkGeoCompliance = (lat: number, lng: number): LegalVerdict => {
 
         // 2. Buffer Zone Check (100m)
         // buffer(geo, radius, { units: 'kilometers' }) -> 0.1km = 100m
-        const bufferedPoly = buffer(poly, 0.1, { units: 'kilometers' });
+        const bufferedPoly = buffer(poly as any, 0.1, { units: 'kilometers' });
         if (bufferedPoly && booleanPointInPolygon(pt, bufferedPoly)) {
-            const props = feature.properties as any;
+            const props = poly.properties;
             // If outside the core zone but inside buffer, it's HIGH RISK
-            const zoneType = props.zone_type || "FOREST";
+            const zoneType = (props.zone_type || "FOREST") as string;
             const lawDetails = LAW_MAP[zoneType] || LAW_MAP["FOREST"];
 
             // If outside the core zone but inside buffer, it's HIGH RISK
@@ -130,7 +149,7 @@ export const checkGeoCompliance = (lat: number, lng: number): LegalVerdict => {
                 article: `${lawDetails.desc} (Buffer Zone Violation)`,
                 section: `${lawDetails.section} r/w Rule 3`,
                 severity: 'HIGH', // Downgraded from potentially CRITICAL
-                zone: `${props.name} (Buffer)`,
+                zone: `${props.name || "Unknown"} (Buffer)`,
                 penalty_type: "Show Cause Notice",
                 jurisdiction: "National Green Tribunal (NGT)"
             };
